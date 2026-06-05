@@ -84,8 +84,8 @@
       scroll-behavior: smooth;
       overflow-x: clip;
       background: var(--rice);
-      background-color: var(--rice); /* iOS Safari overscroll 背景色 */
-      overscroll-behavior-y: none;   /* iOS 16+ 防止 rubber band 露白 */
+      background-color: var(--rice);
+      overscroll-behavior: none; /* Chrome + iOS 16+ 防止 overscroll 露白 */
     }
     #urgent,
     #transparent-plan,
@@ -103,7 +103,7 @@
         radial-gradient(circle at 50% 4%, rgba(232,183,200,.24), transparent 30rem),
         radial-gradient(circle at 84% 10%, rgba(201,164,92,.18), transparent 24rem),
         linear-gradient(180deg, var(--ivory) 0%, var(--rice) 72%, var(--rice) 100%);
-      background-color: var(--rice); /* iOS overscroll 底色 */
+      background-color: var(--rice);
       -webkit-font-smoothing: antialiased;
       overflow-x: clip;
     }
@@ -898,47 +898,93 @@
       border-bottom: 1px solid rgba(201,164,92,.22);
     }
 
-    .process .step {
-      transition: border-color .2s ease, transform .2s ease;
+    /* ── Flow Cards（Process section）────────────────── */
+    .flow-cards-wrap {
+      margin-top: 32px;
+      overflow: hidden; /* clip scroll indicator on desktop */
     }
-    .process .step:hover {
-      border-color: rgba(201,164,92,.45);
-      transform: translateY(-2px);
-    }
-
-    .process-section .shell + .shell {
-      margin-top: 28px;
-    }
-    .process {
+    .flow-cards {
       display: grid;
+      grid-template-columns: repeat(5, 1fr) repeat(4, 24px);
+      /* 5 cards + 4 arrows */
+      grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr 24px 1fr;
       gap: 0;
-      max-width: 900px;
-      margin: 0 auto;
-      border-top: 1px solid var(--gold-line);
+      align-items: stretch;
     }
-    .step {
-      display: grid;
-      grid-template-columns: 92px 1fr;
-      gap: 22px;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--gold-line);
+    .flow-card {
+      background: var(--paper);
+      border: 1px solid var(--gold-line);
+      border-radius: 10px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(42,33,27,.06);
+      transition: transform .2s ease, box-shadow .2s ease;
     }
-    .step-num {
+    .flow-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 36px rgba(42,33,27,.10);
+    }
+    .flow-card-num {
       color: var(--gold);
-      font-size: 38px;
+      font-size: 28px;
       font-weight: 950;
-      line-height: 1;
       letter-spacing: -.05em;
+      line-height: 1;
     }
-    .step h3 {
-      margin: 0 0 8px;
+    .flow-card-body h3 {
+      margin: 0 0 6px;
       color: var(--green);
-      font-size: 20px;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.3;
     }
-    .step p {
+    .flow-card-body p {
       margin: 0;
       color: var(--muted);
-      line-height: 1.85;
+      font-size: 13px;
+      line-height: 1.75;
+    }
+    .flow-card-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 18px;
+      opacity: .55;
+      flex-shrink: 0;
+    }
+
+    /* Mobile: horizontal scroll snap */
+    @media (max-width: 900px) {
+      .flow-cards-wrap {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+        /* extend to edges */
+        margin-left: calc(-1 * (100vw - 100%) / 2);
+        margin-right: calc(-1 * (100vw - 100%) / 2);
+        padding-left: calc((100vw - 100%) / 2 + 12px);
+        padding-right: calc((100vw - 100%) / 2 + 12px);
+      }
+      .flow-cards-wrap::-webkit-scrollbar { display: none; }
+      .flow-cards {
+        grid-template-columns: repeat(9, auto);
+        width: max-content;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 4px;
+      }
+      .flow-card {
+        width: 200px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+      }
+      .flow-card-arrow {
+        width: 20px;
+      }
     }
 
     .pricing-detail-section {
@@ -1256,11 +1302,8 @@
     }
 
     @media (max-width: 640px) {
-      html {
-        overscroll-behavior-y: none;
-      }
-      body {
-        overscroll-behavior-y: none;
+      html, body {
+        overscroll-behavior: none;
       }
       body::before,
       body::after,
@@ -1287,7 +1330,6 @@
       .quiet-contact { display: grid; border-radius: 22px; padding: 18px; }
       section { padding: 52px 0; }
       .pledge, .soft-panel { padding: 24px; }
-      .step { grid-template-columns: 1fr; gap: 8px; }
       .final { padding: 34px 24px; }
       .footer {
         padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
@@ -1323,7 +1365,7 @@
       </a>
       <div class="nav-links">
         <a href="#urgent">第一步</a>
-        <a href="#brand-spirit" class="nav-spirit">品牌精神</a>
+        <a href="#brand-spirit" class="nav-spirit">企業理念</a>
         <a href="#transparent-plan">優質全程價</a>
         <a href="#pricing-detail">費用</a>
         <a href="#faq">家屬常問</a>
@@ -1332,7 +1374,7 @@
     </div>
     <div class="shell nav-mobile-pills" aria-label="快速導覽">
       <a href="#urgent">第一步</a>
-      <a href="#brand-spirit">品牌精神</a>
+      <a href="#brand-spirit">企業理念</a>
       <a href="#transparent-plan">優質全程價</a>
       <a href="#pricing-detail" class="is-accent">費用</a>
       <a href="#faq">常問</a>
@@ -1389,7 +1431,7 @@
         <div class="brand-spirit-editorial">
           <div class="chapter brand-spirit-chapter">02</div>
           <div>
-            <div class="section-kicker">Brand Spirit</div>
+            <div class="section-kicker">Brand Spirit ／ 企業理念</div>
             <h2 class="brand-spirit-h2">讓告別不只是儀式，<br>而是有溫度的陪伴。</h2>
             <div class="brand-spirit-pillars">
               <div class="spirit-pill">
@@ -1426,7 +1468,7 @@
           <div class="chapter" id="transparent-plan">03</div>
         </div>
         <div>
-          <div class="section-kicker">Second Step</div>
+          <div class="section-kicker">Premium</div>
           <h2>優質全程價</h2>
           <div class="price-block">98,000 起</div>
           <p>在人生最後一段路，家屬最需要的不是被一堆名目推著走，而是有人把流程說清楚、把費用講明白、把該做的事情一步一步處理好。</p>
@@ -1482,21 +1524,55 @@
     <section class="process-section step-section">
       <div class="shell editorial">
         <div>
-          <div class="chapter">4.1</div>
+          <div class="chapter" id="process">05</div>
         </div>
         <div>
-          <div id="process" class="section-kicker">Process</div>
-          <h2>從接到電話開始，我們陪您走過每一步。</h2>
-          <p>家屬不用在慌亂中自行判斷流程。先聯絡小金，我們會協助確認狀況與下一步。</p>
+          <div class="section-kicker">Process</div>
+          <h2>從接到電話，我們陪您走每一步。</h2>
+          <p>家屬不需要自己摸索，先聯絡小金，我們說清楚每個環節。</p>
         </div>
       </div>
-      <div class="shell">
-        <div class="process">
-          <div class="step"><div class="step-num">01</div><div><h3>聯絡小金</h3><p>告知往生者目前所在位置、家屬所在地，以及是否已有宗教或習俗需求。</p></div></div>
-          <div class="step"><div class="step-num">02</div><div><h3>確認狀況與接體安排</h3><p>協助確認接體時間、地點與相關注意事項，讓家屬知道下一步該怎麼做。</p></div></div>
-          <div class="step"><div class="step-num">03</div><div><h3>治喪流程規劃</h3><p>依家屬需求、信仰、地方習俗與預算，說明可安排的流程與項目。</p></div></div>
-          <div class="step"><div class="step-num">04</div><div><h3>告別與儀式安排</h3><p>協助安排告別流程、儀式內容、現場需求與親友參與方式。</p></div></div>
-          <div class="step"><div class="step-num">05</div><div><h3>火化與入塔協助</h3><p>協助家屬完成火化、入塔或後續安置流程，讓親人的最後一程妥善完成。</p></div></div>
+      <div class="shell flow-cards-wrap">
+        <div class="flow-cards">
+          <div class="flow-card">
+            <div class="flow-card-num">01</div>
+            <div class="flow-card-body">
+              <h3>聯絡小金</h3>
+              <p>告知往生者位置、家屬所在地，有無宗教或習俗需求。</p>
+            </div>
+          </div>
+          <div class="flow-card-arrow" aria-hidden="true">→</div>
+          <div class="flow-card">
+            <div class="flow-card-num">02</div>
+            <div class="flow-card-body">
+              <h3>確認接體安排</h3>
+              <p>確認時間、地點與注意事項，讓家屬知道下一步。</p>
+            </div>
+          </div>
+          <div class="flow-card-arrow" aria-hidden="true">→</div>
+          <div class="flow-card">
+            <div class="flow-card-num">03</div>
+            <div class="flow-card-body">
+              <h3>治喪流程規劃</h3>
+              <p>依需求、信仰與預算，逐項說明可安排的流程。</p>
+            </div>
+          </div>
+          <div class="flow-card-arrow" aria-hidden="true">→</div>
+          <div class="flow-card">
+            <div class="flow-card-num">04</div>
+            <div class="flow-card-body">
+              <h3>告別與儀式</h3>
+              <p>安排告別流程、儀式內容與親友參與方式。</p>
+            </div>
+          </div>
+          <div class="flow-card-arrow" aria-hidden="true">→</div>
+          <div class="flow-card">
+            <div class="flow-card-num">05</div>
+            <div class="flow-card-body">
+              <h3>火化與入塔</h3>
+              <p>完成後續安置，讓親人的最後一程妥善完成。</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1504,7 +1580,7 @@
     <section class="step-section">
       <div class="shell editorial">
         <div>
-          <div class="chapter">4.2</div>
+          <div class="chapter">06</div>
         </div>
         <div>
           <div class="section-kicker">Inheritance</div>
