@@ -84,6 +84,8 @@
       scroll-behavior: smooth;
       overflow-x: clip;
       background: var(--rice);
+      background-color: var(--rice); /* iOS Safari overscroll 背景色 */
+      overscroll-behavior-y: none;   /* iOS 16+ 防止 rubber band 露白 */
     }
     #urgent,
     #transparent-plan,
@@ -101,6 +103,7 @@
         radial-gradient(circle at 50% 4%, rgba(232,183,200,.24), transparent 30rem),
         radial-gradient(circle at 84% 10%, rgba(201,164,92,.18), transparent 24rem),
         linear-gradient(180deg, var(--ivory) 0%, var(--rice) 72%, var(--rice) 100%);
+      background-color: var(--rice); /* iOS overscroll 底色 */
       -webkit-font-smoothing: antialiased;
       overflow-x: clip;
     }
@@ -292,6 +295,11 @@
     .nav-mobile-pills a.is-accent {
       background: rgba(24,60,50,.08);
       border-color: rgba(24,60,50,.18);
+    }
+    .nav-spirit {
+      opacity: .72;
+      font-style: italic;
+      letter-spacing: .01em;
     }
     .nav-cta {
       padding: 10px 17px;
@@ -661,12 +669,36 @@
 
     /* ── Brand spirit section ────────────────────────── */
     .brand-spirit-section {
-      padding: 72px 0;
+      padding: 76px 0;
       background:
-        radial-gradient(ellipse at 20% 50%, rgba(201,164,92,.10), transparent 40%),
-        rgba(255,255,255,.38);
-      border-top: 1px solid rgba(201,164,92,.18);
-      border-bottom: 1px solid rgba(201,164,92,.18);
+        radial-gradient(ellipse at 20% 50%, rgba(201,164,92,.08), transparent 40%),
+        rgba(255,255,255,.28);
+    }
+    .brand-spirit-editorial {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: clamp(22px, 3vw, 42px);
+      align-items: start;
+      border-top: 1px solid var(--gold-line);
+      padding-top: 58px;
+    }
+    .brand-spirit-chapter {
+      color: var(--gold);
+      font-size: 54px;
+      font-weight: 850;
+      line-height: 1;
+      opacity: .88;
+      letter-spacing: -.06em;
+      position: sticky;
+      top: 100px;
+    }
+    .brand-spirit-chapter::after {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 96px;
+      margin: 18px 0 0 12px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
     }
     .brand-spirit-grid {
       display: grid;
@@ -719,8 +751,19 @@
       line-height: 1.85;
     }
     @media (max-width: 900px) {
+      .brand-spirit-editorial,
       .brand-spirit-grid {
         grid-template-columns: 1fr;
+      }
+      .brand-spirit-chapter {
+        font-size: 42px;
+        position: static;
+      }
+      .brand-spirit-chapter::after {
+        width: 92px;
+        height: 1px;
+        margin: 14px 0 0;
+        background: linear-gradient(90deg, var(--gold), transparent);
       }
     }
     .pledge {
@@ -1139,6 +1182,12 @@
       text-underline-offset: 3px;
     }
 
+    .footer-end-line {
+      margin-top: 16px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,164,92,.4), transparent);
+    }
+
     .mobile-sticky {
       display: none;
       position: fixed;
@@ -1241,7 +1290,7 @@
       .step { grid-template-columns: 1fr; gap: 8px; }
       .final { padding: 34px 24px; }
       .footer {
-        padding-bottom: 88px; /* 為 mobile-sticky 留空間 */
+        padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
       }
       .mobile-sticky {
         display: flex;
@@ -1274,9 +1323,8 @@
       </a>
       <div class="nav-links">
         <a href="#urgent">第一步</a>
+        <a href="#brand-spirit" class="nav-spirit">品牌精神</a>
         <a href="#transparent-plan">優質全程價</a>
-        <a href="#custom">習俗調整</a>
-        <a href="#process">流程</a>
         <a href="#pricing-detail">費用</a>
         <a href="#faq">家屬常問</a>
         <a class="nav-cta" href="tel:0927239577" data-track="click_mobile_nav">立即聯絡</a>
@@ -1284,9 +1332,9 @@
     </div>
     <div class="shell nav-mobile-pills" aria-label="快速導覽">
       <a href="#urgent">第一步</a>
+      <a href="#brand-spirit">品牌精神</a>
       <a href="#transparent-plan">優質全程價</a>
       <a href="#pricing-detail" class="is-accent">費用</a>
-      <a href="#process">流程</a>
       <a href="#faq">常問</a>
     </div>
   </nav>
@@ -1336,10 +1384,46 @@
       </div>
     </section>
 
+    <section class="brand-spirit-section" id="brand-spirit">
+      <div class="shell">
+        <div class="brand-spirit-editorial">
+          <div class="chapter brand-spirit-chapter">02</div>
+          <div>
+            <div class="section-kicker">Brand Spirit</div>
+            <h2 class="brand-spirit-h2">讓告別不只是儀式，<br>而是有溫度的陪伴。</h2>
+            <div class="brand-spirit-pillars">
+              <div class="spirit-pill">
+                <div class="spirit-pill-icon">陪</div>
+                <div>
+                  <strong>陪家屬走過最難的時刻</strong>
+                  <p>我們不只辦手續，我們陪在旁邊，讓家屬知道每一步都有人說清楚。</p>
+                </div>
+              </div>
+              <div class="spirit-pill">
+                <div class="spirit-pill-icon">圓</div>
+                <div>
+                  <strong>幫家屬把事情圓滿</strong>
+                  <p>從接體到入塔，每個細節都交代清楚，讓家屬不用在慌亂中做決定。</p>
+                </div>
+              </div>
+              <div class="spirit-pill">
+                <div class="spirit-pill-icon">安</div>
+                <div>
+                  <strong>讓家人安心</strong>
+                  <p>費用說清楚，流程不藏話。穩重、誠懇、有質感，不浮誇。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
     <section class="plan-section step-section">
       <div class="shell editorial">
         <div>
-          <div class="chapter" id="transparent-plan">02</div>
+          <div class="chapter" id="transparent-plan">03</div>
         </div>
         <div>
           <div class="section-kicker">Second Step</div>
@@ -1370,7 +1454,7 @@
     <section class="custom-section step-section">
       <div class="shell editorial">
         <div>
-          <div class="chapter" id="custom">03</div>
+          <div class="chapter" id="custom">04</div>
         </div>
         <div>
           <div class="section-kicker">Custom & Ritual</div>
@@ -1398,7 +1482,7 @@
     <section class="process-section step-section">
       <div class="shell editorial">
         <div>
-          <div class="chapter">04</div>
+          <div class="chapter">4.1</div>
         </div>
         <div>
           <div id="process" class="section-kicker">Process</div>
@@ -1420,7 +1504,7 @@
     <section class="step-section">
       <div class="shell editorial">
         <div>
-          <div class="chapter">05</div>
+          <div class="chapter">4.2</div>
         </div>
         <div>
           <div class="section-kicker">Inheritance</div>
@@ -1510,40 +1594,7 @@
       </div>
     </section>
 
-    <!-- 品牌精神 section -->
-    <section class="brand-spirit-section">
-      <div class="shell">
-        <div class="brand-spirit-grid">
-          <div class="brand-spirit-lead">
-            <div class="section-kicker">Brand Spirit</div>
-            <h2 class="brand-spirit-h2">讓告別不只是儀式，<br>而是有溫度的陪伴。</h2>
-          </div>
-          <div class="brand-spirit-pillars">
-            <div class="spirit-pill">
-              <div class="spirit-pill-icon">陪</div>
-              <div>
-                <strong>陪家屬走過最難的時刻</strong>
-                <p>我們不只辦手續，我們陪在旁邊，讓家屬知道每一步都有人說清楚。</p>
-              </div>
-            </div>
-            <div class="spirit-pill">
-              <div class="spirit-pill-icon">圓</div>
-              <div>
-                <strong>幫家屬把事情圓滿</strong>
-                <p>從接體到入塔，每個細節都交代清楚，讓家屬不用在慌亂中做決定。</p>
-              </div>
-            </div>
-            <div class="spirit-pill">
-              <div class="spirit-pill-icon">安</div>
-              <div>
-                <strong>讓家人安心</strong>
-                <p>費用說清楚，流程不藏話。穩重、誠懇、有質感，不浮誇。</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- 品牌精神 section -->    </section>
 
     <section>
       <div class="shell final">
@@ -1583,6 +1634,7 @@
           <p>本頁使用網站分析工具統計瀏覽、點擊與轉換成效，用於頁面優化與服務改善。</p>
         </div>
       </details>
+      <div class="footer-end-line" aria-hidden="true"></div>
     </div>
     <div class="mobile-sticky" aria-label="手機固定操作列">
       <a class="btn btn-primary" href="tel:0927239577" data-track="click_mobile_sticky">撥打小金</a>
