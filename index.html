@@ -49,12 +49,13 @@
   }
   </script>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4S7RS4P8EY"></script>
+  <!-- Google tag (gtag.js) — 蓮花生命禮儀 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JQDYQ808R"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-4S7RS4P8EY', {
+    gtag('config', 'G-1JQDYQ808R', {
       page_path: '/lotus/',
       page_title: 'Lotus 蓮花生命禮儀｜優質全程價'
     });
@@ -621,6 +622,107 @@
       gap: 28px;
       align-items: stretch;
     }
+    /* 移除浮水印卡片後，對齊 editorial 右欄 */
+    .pledge-wrap--single {
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 901px) {
+      .pledge-wrap--single {
+        padding-left: calc(120px + clamp(22px, 3vw, 42px));
+      }
+    }
+
+    /* ── Footer company block ────────────────────────── */
+    .footer-company {
+      padding: 16px 0 14px;
+      border-bottom: 1px solid rgba(42,33,27,.08);
+      margin-bottom: 14px;
+    }
+    .footer-company-name {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--green);
+      letter-spacing: .04em;
+      margin-bottom: 4px;
+    }
+    .footer-company-meta {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .footer-sep { margin: 0 .3em; opacity: .5; }
+    .footer-company-addr {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    /* ── Brand spirit section ────────────────────────── */
+    .brand-spirit-section {
+      padding: 72px 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(201,164,92,.10), transparent 40%),
+        rgba(255,255,255,.38);
+      border-top: 1px solid rgba(201,164,92,.18);
+      border-bottom: 1px solid rgba(201,164,92,.18);
+    }
+    .brand-spirit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: clamp(28px, 4vw, 64px);
+      align-items: start;
+    }
+    .brand-spirit-h2 {
+      margin: 14px 0 0;
+      color: var(--green);
+      font-size: clamp(22px, 2.8vw, 34px);
+      line-height: 1.35;
+      letter-spacing: -.04em;
+      font-weight: 680;
+    }
+    .brand-spirit-pillars {
+      display: grid;
+      gap: 20px;
+    }
+    .spirit-pill {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .spirit-pill-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(201,164,92,.45);
+      background: rgba(255,255,255,.72);
+      display: grid;
+      place-items: center;
+      color: var(--gold-deep);
+      font-weight: 950;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .spirit-pill strong {
+      display: block;
+      color: var(--green);
+      font-size: 16px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+    .spirit-pill p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+    @media (max-width: 900px) {
+      .brand-spirit-grid {
+        grid-template-columns: 1fr;
+      }
+    }
     .pledge {
       position: relative;
       overflow: hidden;
@@ -638,34 +740,20 @@
       pointer-events: none;
     }
     .pledge > * { position: relative; z-index: 1; }
-    /* 全頁浮水印：fixed 壓在可見區中央 */
-    .pledge--watermark {
+    /* 全頁浮水印：固定在 viewport 中央，脫離任何容器 */
+    .site-watermark {
       pointer-events: none;
-      position: fixed !important;
+      position: fixed;
       top: 50vh;
       left: 50vw;
       transform: translate(-50%, -50%);
-      width: min(340px, 52vw);
-      height: min(340px, 52vw);
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      padding: 0 !important;
+      width: min(320px, 48vw);
+      height: min(320px, 48vw);
       border-radius: 999px;
-      display: grid;
-      place-items: center;
       z-index: 0;
-      overflow: visible !important;
-    }
-    .pledge--watermark::before { display: none !important; }
-    .pledge--watermark::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 999px;
       background: url("data:image/png;base64,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") center/contain no-repeat;
-      opacity: 0.07;
-      filter: grayscale(1) sepia(1) hue-rotate(10deg) saturate(0.6);
+      opacity: 0.065;
+      filter: grayscale(1) sepia(1) hue-rotate(10deg) saturate(0.5);
     }
     .line-link {
       display: inline-flex;
@@ -1259,10 +1347,7 @@
           <div class="note">實際內容仍會依家屬需求、地點、宗教儀式、場地規定與加選項目確認後安排。</div>
         </div>
       </div>
-      <div class="shell pledge-wrap">
-        <article class="pledge pledge--watermark" aria-hidden="true">
-        </article>
-
+      <div class="shell pledge-wrap pledge-wrap--single">
         <article class="soft-panel">
           <h3>專案可協助完成主要後事流程</h3>
           <ul class="list">
@@ -1422,6 +1507,41 @@
       </div>
     </section>
 
+    <!-- 品牌精神 section -->
+    <section class="brand-spirit-section">
+      <div class="shell">
+        <div class="brand-spirit-grid">
+          <div class="brand-spirit-lead">
+            <div class="section-kicker">Brand Spirit</div>
+            <h2 class="brand-spirit-h2">讓告別不只是儀式，<br>而是有溫度的陪伴。</h2>
+          </div>
+          <div class="brand-spirit-pillars">
+            <div class="spirit-pill">
+              <div class="spirit-pill-icon">陪</div>
+              <div>
+                <strong>陪家屬走過最難的時刻</strong>
+                <p>我們不只辦手續，我們陪在旁邊，讓家屬知道每一步都有人說清楚。</p>
+              </div>
+            </div>
+            <div class="spirit-pill">
+              <div class="spirit-pill-icon">圓</div>
+              <div>
+                <strong>幫家屬把事情圓滿</strong>
+                <p>從接體到入塔，每個細節都交代清楚，讓家屬不用在慌亂中做決定。</p>
+              </div>
+            </div>
+            <div class="spirit-pill">
+              <div class="spirit-pill-icon">安</div>
+              <div>
+                <strong>讓家人安心</strong>
+                <p>費用說清楚，流程不藏話。穩重、誠懇、有質感，不浮誇。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section>
       <div class="shell final">
         <h2>請放心交給我們。</h2>
@@ -1446,6 +1566,16 @@
           <p>本頁使用網站分析工具統計瀏覽、點擊與轉換成效，用於頁面優化與服務改善。</p>
         </div>
       </details>
+      <!-- 蓮花生命禮儀 公司資訊 -->
+      <div class="footer-company">
+        <div class="footer-company-name">蓮花生命禮儀社</div>
+        <div class="footer-company-meta">
+          <span>執行長 王敬堯</span>
+          <span class="footer-sep">｜</span>
+          <span>統一編號 99237230</span>
+        </div>
+        <div class="footer-company-addr">屏東縣屏東市大連里興豐路一四一之一號一樓</div>
+      </div>
       <div class="powered">
         <span>本頁由委託人委託 <a href="https://www.4force.com.tw/" target="_blank" rel="noopener">4force lab 萬合天宜</a> 製作與部署</span>
         <span><a href="https://www.4force.com.tw/" target="_blank" rel="noopener">回 4force lab 首頁</a>｜© 2026 4force lab. All rights reserved.</span>
@@ -1512,9 +1642,34 @@
     document.querySelectorAll('[data-track]').forEach((el) => {
       el.addEventListener('click', () => {
         const eventName = el.getAttribute('data-track');
+        const href = el.getAttribute('href') || '';
         console.log('track:', eventName);
-        if (typeof window.gtag === 'function') {
+
+        if (typeof window.gtag !== 'function') return;
+
+        // 電話事件
+        if (href.startsWith('tel:')) {
+          window.gtag('event', 'phone_call', {
+            event_category: 'contact',
+            event_label: eventName,
+            phone_number: href.replace('tel:', ''),
+            page_type: 'onepage_funeral_service',
+            client: 'lotus_life_ceremony'
+          });
+        }
+        // LINE 事件
+        else if (href.includes('line.me') || eventName.includes('line')) {
+          window.gtag('event', 'line_add_friend', {
+            event_category: 'contact',
+            event_label: eventName,
+            page_type: 'onepage_funeral_service',
+            client: 'lotus_life_ceremony'
+          });
+        }
+        // 其他點擊
+        else {
           window.gtag('event', eventName, {
+            event_category: 'navigation',
             page_type: 'onepage_funeral_service',
             client: 'lotus_life_ceremony'
           });
@@ -1581,5 +1736,7 @@
       else mq.addListener(applyLock);
     })();
   </script>
+  <!-- 全頁浮水印 logo，fixed 壓在 viewport 中央 -->
+  <div class="site-watermark" aria-hidden="true"></div>
 </body>
 </html>
