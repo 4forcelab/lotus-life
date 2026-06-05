@@ -740,13 +740,16 @@
       pointer-events: none;
     }
     .pledge > * { position: relative; z-index: 1; }
-    /* 全頁浮水印：固定在 viewport 中央，脫離任何容器 */
+    /* 全頁浮水印：固定在 viewport 中央
+       will-change:transform 強制建立獨立 stacking context，
+       繞過 body overflow-x:clip 對 position:fixed 的 containing block 問題 */
     .site-watermark {
       pointer-events: none;
       position: fixed;
       top: 50vh;
       left: 50vw;
       transform: translate(-50%, -50%);
+      will-change: transform;
       width: min(320px, 48vw);
       height: min(320px, 48vw);
       border-radius: 999px;
@@ -1238,7 +1241,7 @@
       .step { grid-template-columns: 1fr; gap: 8px; }
       .final { padding: 34px 24px; }
       .footer {
-        padding-bottom: 12px;
+        padding-bottom: 88px; /* 為 mobile-sticky 留空間 */
       }
       .mobile-sticky {
         display: flex;
@@ -1558,15 +1561,7 @@
 
   <footer class="footer">
     <div class="shell footer-box">
-      <details class="footer-legal">
-        <summary>網頁製作與免責說明（4force lab）</summary>
-        <div class="footer-legal-body">
-          <p>本頁由 4force lab 萬合天宜有限公司依委託製作與部署，僅提供網頁設計、上架與基礎追蹤服務。頁面所載服務內容、方案資訊、聯絡方式及後續諮詢、報價、交易或服務流程，均由委託人自行負責。</p>
-          <p>本頁資訊係為協助家屬初步理解屏東蓮花生命禮儀社服務內容與聯絡方式；實際服務項目、費用與安排，仍需依家屬需求、地點、宗教儀式、地方習俗、場地規定及雙方確認內容為準。</p>
-          <p>本頁使用網站分析工具統計瀏覽、點擊與轉換成效，用於頁面優化與服務改善。</p>
-        </div>
-      </details>
-      <!-- 蓮花生命禮儀 公司資訊 -->
+      <!-- 蓮花生命禮儀 公司資訊（優先顯示） -->
       <div class="footer-company">
         <div class="footer-company-name">蓮花生命禮儀社</div>
         <div class="footer-company-meta">
@@ -1580,6 +1575,14 @@
         <span>本頁由委託人委託 <a href="https://www.4force.com.tw/" target="_blank" rel="noopener">4force lab 萬合天宜</a> 製作與部署</span>
         <span><a href="https://www.4force.com.tw/" target="_blank" rel="noopener">回 4force lab 首頁</a>｜© 2026 4force lab. All rights reserved.</span>
       </div>
+      <details class="footer-legal">
+        <summary>網頁製作與免責說明（4force lab）</summary>
+        <div class="footer-legal-body">
+          <p>本頁由 4force lab 萬合天宜有限公司依委託製作與部署，僅提供網頁設計、上架與基礎追蹤服務。頁面所載服務內容、方案資訊、聯絡方式及後續諮詢、報價、交易或服務流程，均由委託人自行負責。</p>
+          <p>本頁資訊係為協助家屬初步理解屏東蓮花生命禮儀社服務內容與聯絡方式；實際服務項目、費用與安排，仍需依家屬需求、地點、宗教儀式、地方習俗、場地規定及雙方確認內容為準。</p>
+          <p>本頁使用網站分析工具統計瀏覽、點擊與轉換成效，用於頁面優化與服務改善。</p>
+        </div>
+      </details>
     </div>
     <div class="mobile-sticky" aria-label="手機固定操作列">
       <a class="btn btn-primary" href="tel:0927239577" data-track="click_mobile_sticky">撥打小金</a>
@@ -1589,6 +1592,14 @@
   </footer>
 
   <script>
+    // 浮水印：掛在 <html> 上而非 <body>，繞過 body overflow-x:clip 的 containing block 問題
+    (function injectWatermark() {
+      var wm = document.createElement('div');
+      wm.className = 'site-watermark';
+      wm.setAttribute('aria-hidden', 'true');
+      document.documentElement.appendChild(wm);
+    })();
+
     console.log("%c本網站由 4force lab 萬合天宜有限公司製作", "font-size:18px;font-weight:900;color:#183c32;");
     console.log("%c4force OnePage｜一頁式成交頁設計・QR Code Landing Page・網站部署與 GA 追蹤設定", "font-size:13px;color:#2a211b;");
     console.log("%c如果你也想打造一個可轉傳、可掃 QR Code、可追蹤的一頁式成交頁，歡迎聯絡我們：https://www.4force.com.tw", "font-size:13px;color:#c9a45c;");
@@ -1677,66 +1688,8 @@
       });
     });
 
-    (function lockMobilePageEnd() {
-      const mq = window.matchMedia('(max-width: 640px)');
-      const footer = document.querySelector('.footer');
-      if (!footer) return;
-
-      function viewportHeight() {
-        return window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      }
-
-      function footerEndY() {
-        return Math.ceil(footer.getBoundingClientRect().bottom + window.scrollY);
-      }
-
-      function resetLock() {
-        document.documentElement.style.removeProperty('height');
-        document.documentElement.style.removeProperty('max-height');
-        document.body.style.removeProperty('height');
-        document.body.style.removeProperty('max-height');
-      }
-
-      function clampScroll() {
-        const end = footerEndY();
-        const maxScroll = Math.max(0, end - viewportHeight());
-        if (window.scrollY > maxScroll + 1) {
-          window.scrollTo(0, maxScroll);
-        }
-      }
-
-      function applyLock() {
-        resetLock();
-        if (!mq.matches) return;
-
-        const end = footerEndY();
-        document.documentElement.style.height = end + 'px';
-        document.documentElement.style.maxHeight = end + 'px';
-        document.body.style.height = end + 'px';
-        document.body.style.maxHeight = end + 'px';
-        clampScroll();
-      }
-
-      applyLock();
-      window.addEventListener('resize', applyLock);
-      window.addEventListener('orientationchange', () => setTimeout(applyLock, 150));
-      window.addEventListener('load', () => setTimeout(applyLock, 0));
-      window.addEventListener('scroll', () => {
-        if (mq.matches) clampScroll();
-      }, { passive: true });
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', applyLock);
-        window.visualViewport.addEventListener('scroll', clampScroll);
-      }
-      if (typeof ResizeObserver !== 'undefined') {
-        new ResizeObserver(applyLock).observe(footer);
-        new ResizeObserver(applyLock).observe(document.body);
-      }
-      if (mq.addEventListener) mq.addEventListener('change', applyLock);
-      else mq.addListener(applyLock);
-    })();
+    // lockMobilePageEnd removed — mobile-sticky is position:fixed,
+    // height clamping caused blank space at bottom after page height changed.
   </script>
-  <!-- 全頁浮水印 logo，fixed 壓在 viewport 中央 -->
-  <div class="site-watermark" aria-hidden="true"></div>
 </body>
 </html>
